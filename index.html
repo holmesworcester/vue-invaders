@@ -75,7 +75,7 @@
         		}
         		// clear out the missile if it's off the screen
         		if (this.missile.y > 90) {
-        			this.missile.fired = false
+        			this.missile = false
         		}
         		// move the ship
         		this.ship.x+=this.ship.vel
@@ -99,7 +99,7 @@
         			this.ship.dead = true
         		}
         		// missile kills burger, itself
-        		if (Math.abs(this.missile.x - this.burger.x) < closeness && Math.abs(this.missile.y - this.burger.y) < closeness-7) {
+        		if (this.missile.fired && Math.abs(this.missile.x - this.burger.x) < closeness && Math.abs(this.missile.y - this.burger.y) < closeness-7) {
         			this.burger.born = false
         			this.missile.fired = false
         		}
