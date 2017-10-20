@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+<link rel="stylesheet" href="main.css">
+<body>
+  <script src="https://unpkg.com/vue"></script>
+  <div id="app" tabindex="0" ref="appRef"
+            v-on:keydown.left="left"
+            v-on:keydown.right="right"
+            v-on:keydown.space="fire"
+        >
+  	<h1 v-if="!ship.dead">save your planet from burger.<br> arrows move. spacebar shoots.</h1>
+  	<h1 v-if="ship.dead">burger killed your planet.<br> game over.</h1>
+  	<img id="burger" src="img/burger.svg" v-bind:style="{ left: burger.x + 'vw', bottom: burger.y + 'vh' }">
+  	<img id="missile" src="img/missile.svg" v-if="missile.fired" v-bind:style="{ left: missile.x + 'vw', bottom: missile.y + 'vh' }">
+  	<img id="ship" src="img/ship.svg" v-if="!ship.dead" v-bind:style="{ left: ship.x + 'vw' }">
+  </div>
+
+	<script>
+		// some constant values for tweaking
+		const speed = 2
+		const burgerStartSpeed = 0.1
+		const burgerSpeedIncrease = 0.1
+		const missileSpeed = 3
+		// the start value of the missile y posiiton in vh units
+		const missileStart = 15
+		const tickSpeed = 20
+		const closeness = 10
+
+    new Vue({
+        el: "#app",
+  		created: function () {
+  			    // gives focus to the app div 
+        		this.$nextTick(() => this.$refs.appRef.focus())
+        		// gives me a clock tick
+        		ticking = setInterval(this.tick, tickSpeed);
+        	},
+        data: {
+        	// ship position on a scale of 0 to 100 where 50 is in the middle, 0 is left, 100 is right.
+        	ship: {
+        		x: 40,
+        		vel: 0,
+        		dead: false
+        	},
+        	// a missle's position. 
+        	missile: {
+        		fired: false,
+        		x: null,
+        		y: null
+        	},
+        	burger: {
+        		born: false,
+        		x: Math.random()*80,
+        		y: null,
+        		speed: burgerStartSpeed
+        	}
+        },
+        methods: {
+        	left: function () {
+        		this.ship.vel = -1
+        	},
+        	right: function () {
+        		this.ship.vel = 1
+        	},
+        	fire: function () {
+        		this.missile = {
+        			fired: true,
+        			x: this.ship.x+6,
+        			y: missileStart
+        		}
+        	},
+        	tick: function () {
+        		// move the missile up the screen
+        		if (this.missile.fired) {
+        			this.missile.y+=missileSpeed
+        		}
+        		// clear out the missile if it's off the screen
+        		if (this.missile.y > 90) {
+        			this.missile.fired = false
+        		}
+        		// move the ship
+        		this.ship.x+=this.ship.vel
+        		// keep the ship in bounds
+        		if (this.ship.x < 0 || this.ship.x > 80) {
+        			this.ship.vel = 0
+        		}
+        		// birth an even meaner burger
+        		if (!this.burger.born) {
+        			this.burger = {
+        				born: true,
+        				x: Math.random()*80,
+        				y: 90,
+        				speed: this.burger.speed+=burgerSpeedIncrease
+        			}
+        		}
+        		// move the burger but limit its movement.
+        		this.burger.y = Math.max(0, this.burger.y-this.burger.speed)
+        		// game over
+        		if (this.burger.y <= 0) {
+        			this.ship.dead = true
+        		}
+        		// missile kills burger, itself
+        		if (Math.abs(this.missile.x - this.burger.x) < closeness && Math.abs(this.missile.y - this.burger.y) < closeness-7) {
+        			this.burger.born = false
+        			this.missile.fired = false
+        		}
+        		}
+        	}
+        });
+	</script>
+</html>

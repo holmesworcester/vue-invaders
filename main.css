@@ -1,0 +1,36 @@
+body {
+  background: #3A1C71;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #FFAF7B, #D76D77, #3A1C71);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #FFAF7B, #D76D77, #3A1C71); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  height: 100vh;
+  font-family: sans-serif;
+}
+
+h1 {
+  font-size: 40px;
+  position: absolute;
+  top: 3vh;
+  left: 20vw;
+  color: white;
+}
+
+#ship {
+  position: absolute;
+  height: 20vh;
+  bottom: 0vh;
+  left: 40vw;
+}
+
+#missile {
+  position: absolute;
+  height: 10vh;
+  bottom: 0vh;
+  left: 48vw;
+}
+
+#burger {
+  position: absolute;
+  height: 20vh;
+  bottom: 0vh;
+  left: 40vw;
+}
